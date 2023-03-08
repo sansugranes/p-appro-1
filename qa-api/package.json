@@ -1,0 +1,14 @@
+{
+  "name": "qaapp-api",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Santiago Sugranes",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql2": "^3.1.1"
+  }
+}

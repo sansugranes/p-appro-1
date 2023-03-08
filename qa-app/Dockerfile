@@ -1,5 +1,10 @@
 FROM php:8.0-fpm
 
+# Installation de node pour le serveur bundeling de Vite, uniquement pour dev env
+COPY --from=node /usr/local/bin/node /usr/local/bin/node
+COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
+
 # Variables définies dans le fichier docker-compose.yml
 ARG user
 ARG uid

@@ -11,12 +11,14 @@ services:
     container_name: qaapp-app
     restart: unless-stopped
     working_dir: /var/www/
+    ports:
+      - 5173:5173
     volumes:
       - ./qa-app/:/var/www
     networks:
       - qaapp
 
-  db:
+  appdb:
     image: mysql:8.0
     container_name: qaapp-db
     restart: unless-stopped
@@ -27,10 +29,6 @@ services:
       MYSQL_USER: use
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
-    ports:
-      - 3306:3306
-    volumes:
-      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
     networks:
       - qaapp
 
@@ -46,6 +44,42 @@ services:
     networks:
       - qaapp
 
+  api:
+    container_name: qaapi-api
+    build:
+      context: ./qa-api/
+      dockerfile: Dockerfile
+    command: nodemon --legacy-watch server.js
+    image: qaapi
+    restart: unless-stopped
+    volumes:
+      - ./qa-api/:/usr/src/app
+    ports:
+      - 3000:3000
+    networks:
+      - qaapi
+      - qaapp
+
+  apidb:
+    image: mysql:8.0
+    container_name: qaapi-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: qaapi
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: usepwd
+      MYSQL_USER: use
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    ports:
+      - 3306:3307
+    volumes:
+      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - qaapi
+
 networks:
   qaapp:
+    driver: bridge
+  qaapi:
     driver: bridge
