@@ -28,7 +28,7 @@
                         </svg>
                     </button>
                     <div class="dropdown-menu-content">
-                        <span class="dropdown-user-name">John Do</span>
+                        <span class="dropdown-user-name">{{ auth()->user()->name }}</span>
                         <hr>
                         <div class="dropdown-links">
                             <form method="POST" action="{{ route('logout') }}">
